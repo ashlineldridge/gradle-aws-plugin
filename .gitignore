@@ -5,6 +5,7 @@ classes/
 .idea/
 .project
 .classpath
+.gradle/
 *.iml
 artifact-version.properties
 *.swp
