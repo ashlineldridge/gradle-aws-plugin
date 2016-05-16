@@ -1,0 +1,13 @@
+target/
+classes/
+*.jar
+*.class
+.idea/
+.project
+.classpath
+*.iml
+artifact-version.properties
+*.swp
+*.pyc
+*.orig
+*.sc
