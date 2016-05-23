@@ -1,127 +1,32 @@
+import awsplugin.AWSPlugin
+
 apply plugin: AWSPlugin
+apply plugin: 'groovy'
+
+def buildNumber() {
+    return properties.get('buildNumber')
+}
 
 stacks {
     scaffolding {
-        property1 = 'value1'
-        property2 = 'value2'
+        name     "foobarbaz-scaffolding"
+        template file('template.json')
+        tags     (key: "v1", key2: "v2")
+
+        bucketName = 'seek-foobarbaz'
+        owner = 'engineering@seek.com.au'
         sandbox {
-            property3 = 'sandboxValue3'
-        }
-        property3 = 'value3'
-        production {
-            property2 = 'productionValue2'
-            property3 = property1
-            property4 = sandbox.property3
+            bucketName = 'seek-foobarbaz-sandbox'
         }
     }
     application {
-        property1 = 'value1'
-        sandbox {
-            property1 = scaffolding.property1
-            property2 = scaffolding.sandbox.property3
-            property4 = scaffolding.output['QueueName']
-        }
+        name "foobarbaz-application-${buildNumber()}"
+        template file('template.json')
+
+        bucketName = scaffolding.output.buildBucketName
     }
 }
 
-
-
-
-
-
-class AWSPlugin implements Plugin<Project> {
-    void apply(Project project) {
-        def stacks = project.container(Stack)
-        stacks.all {
-            // Can set defaults here
-        }
-        project.extensions.stacks = stacks
-    }
-}
-
-class PropertyKey {
-    final String environment
-    final String name
-
-    PropertyKey(String environment, String name) {
-        this.environment = environment
-        this.name = name
-    }
-
-    def String toString() {
-        def e = environment.isEmpty() ? 'default' : environment
-        "PropertyKey: ($e, $name)"
-    }
-}
-
-interface PropertyValue {}
-
-class SimplePropertyValue implements PropertyValue {
-    final Object value
-
-    SimplePropertyValue(Object value) {
-        this.value = value
-    }
-
-    def String toString() {
-        "SimplePropertyValue: (${value.toString()})"
-    }
-}
-
-class ReferencePropertyValue implements PropertyValue {
-    final List<String> refs = []
-
-    ReferencePropertyValue(String ref) {
-        refs.add(ref)
-    }
-
-    def propertyMissing(String p) {
-        refs.add(p)
-        this
-    }
-
-    def String toString() {
-        "ReferencePropertyValue: (${refs.toString()})"
-    }
-}
-
-class Stack {
-    final String name
-    final Map<PropertyKey, PropertyValue> props = [:]
-    String currentEnvironment = ''
-
-    Stack(String name) {
-        this.name = name
-    }
-
-    def methodMissing(String m, args) {
-        if (args.length > 0 && args[0] instanceof Closure) {
-            currentEnvironment = m
-            Closure c = args[0]
-            c()
-            currentEnvironment = ''
-        } else {
-            throw new InvalidUserDataException("Environment '$m' must be supplied with a closure containing environment properties")
-        }
-    }
-
-    def propertyMissing(String p) {
-        new ReferencePropertyValue(p)
-    }
-
-    def propertyMissing(String p, v) {
-        def pk = new PropertyKey(currentEnvironment, p)
-        def pv = v instanceof PropertyValue ? v : new SimplePropertyValue(v)
-        props.put(pk, pv)
-    }
-}
-
-task stacks << {
-    stacks.each { stack ->
-        println "Stack: ${stack.name}:"
-        stack.props.each { k, v ->
-            println "$k, $v"
-        }
-        println ""
-    }
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
 }

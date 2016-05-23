@@ -1,7 +1,7 @@
 Gradle AWS Plugin
 =================
 
- cmdline: gradle create-stack -Pstack.name=application -Pstack.environment=sandbox -Pstack.property1=cmdLineOverride -Pstack.teamCityProperty=foobarbaz
+ cmdline: gradle create-stack -Pstack.name=application -Pstack.environment=sandbox -Pstack.application.property1=cmdLineOverride -Pstack.application.teamCityProperty=foobarbaz
  cmdline: gradle update-stack ...
  cmdline: gradle create-or-update-stack ...
  Define utitily tasks such as:

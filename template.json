@@ -1,0 +1,40 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Fat Feed S3 build bucket stack",
+  "Parameters": {
+    "BucketName": {
+      "Type": "String",
+      "Description": "Name of bucket to create",
+      "AllowedPattern": "[a-z0-9_-]*"
+    },
+    "Owner": {
+      "Description": "Owner tag",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "BuildBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Ref": "BucketName"
+        },
+        "Tags": [{
+          "Key": "Owner",
+          "Value": {
+            "Ref": "Owner"
+          }
+        }]
+      }
+    }
+  },
+  "Outputs": {
+    "BuildBucketName": {
+      "Description": "Name of s3 bucket to hold Fat Feed assets",
+      "Value": {
+        "Ref": "BucketName"
+      }
+    }
+  }
+}
+
