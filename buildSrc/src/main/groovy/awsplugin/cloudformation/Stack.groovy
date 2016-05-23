@@ -26,7 +26,16 @@ class Stack {
     }
 
     Map<PropertyKey, PropertyValue> props(String environment) {
-        props.findAll { k, _ -> k.environment == '' || k.environment == environment }
+        props.findAll { k, _ ->
+            if (environment == '') {
+                return k.environment == ''
+            } else {
+                if (k.environment == '') {
+                    return props.find { kk, __ -> kk.name == k.name && kk.environment == environment } == null
+                }
+                return k.environment == environment
+            }
+        }
     }
 
     def methodMissing(String m, args) {
