@@ -31,9 +31,7 @@
   "Outputs": {
     "BuildBucketName": {
       "Description": "Name of s3 bucket to hold Fat Feed assets",
-      "Value": {
-        "Ref": "BucketName"
-      }
+      "Value": "ashlineldridge-dummy"
     }
   }
 }

@@ -13,10 +13,10 @@ stacks {
         template file('template.json')
         tags     (key: "v1", key2: "v2")
 
-        bucketName = 'seek-foobarbaz'
-        owner = 'engineering@seek.com.au'
+        bucketName = 'ashlineldridge-foobarbaz'
+        owner = 'me'
         sandbox {
-            bucketName = 'seek-foobarbaz-sandbox'
+            bucketName = 'ashlineldridge-foobarbaz-sandbox'
         }
     }
     application {
@@ -24,6 +24,7 @@ stacks {
         template file('template.json')
 
         bucketName = scaffolding.output.buildBucketName
+        owner = 'me'
     }
 }
 

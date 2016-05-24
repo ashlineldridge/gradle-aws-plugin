@@ -17,17 +17,29 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class AbstractStackTask extends DefaultTask {
 
+    final boolean requireTargetStack
     final AmazonCloudFormationClient client = new AmazonCloudFormationClient()
 
     abstract def run()
 
     abstract String usage()
 
+    AbstractStackTask() {
+        this(true)
+    }
+
+    AbstractStackTask(boolean requireTargetStack) {
+        this.requireTargetStack = requireTargetStack
+    }
+
     @TaskAction
     def exec() {
-        if (stackName() == null) userDataError()
-        if (stack() == null) userDataError("Stack '${stackName()}' is not valid")
-        def region = stack().region ?: project.aws.region
+        def region = project.aws.region
+        if (requireTargetStack) {
+            if (!stackName()) userDataError()
+            if (!stack()) userDataError("Stack '${stackName()}' is not valid")
+            if (stack().region) region = stack().region
+        }
         client.setRegion(Region.getRegion(Regions.fromName(region)))
         run()
     }
@@ -51,7 +63,7 @@ abstract class AbstractStackTask extends DefaultTask {
     def Collection<Parameter> stackParameters() {
         def params = []
         stack().props(environment()).each { k, v ->
-            params.add(new Parameter().withParameterKey(k.name.capitalize()).withParameterValue(v.resolve(project)))
+            params.add(new Parameter().withParameterKey(k.name.capitalize()).withParameterValue(v.value()))
         }
         params
     }
@@ -68,9 +80,10 @@ abstract class AbstractStackTask extends DefaultTask {
         throw new InvalidUserDataException(msg != null ? "Error: ${msg}\n${usage()}" : usage())
     }
 
-    StackStatus stackStatus() {
+    StackStatus stackStatus(String stackName = null) {
+        stackName = stackName ?: stack().cloudFormationName
         try {
-            def res = client.describeStacks(new DescribeStacksRequest().withStackName(stack().cloudFormationName))
+            def res = client.describeStacks(new DescribeStacksRequest().withStackName(stackName))
             if (!res.stacks.isEmpty()) {
                 return StackStatus.valueOf(res.stacks.head().stackStatus)
             }
@@ -82,8 +95,8 @@ abstract class AbstractStackTask extends DefaultTask {
         }
     }
 
-    Boolean exists() {
-        def status = stackStatus()
+    Boolean exists(String stackName = null) {
+        def status = stackStatus(stackName)
         return status != StackStatus.NON_EXISTENT && status != StackStatus.DELETE_COMPLETE
     }
 }
