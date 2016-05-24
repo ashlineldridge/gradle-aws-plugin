@@ -4,7 +4,7 @@ class Stack {
     final String name
     String cloudFormationName
     File template
-    Map<String, String> tags = [:]
+    Map<PropertyKey, String> tags = [:]
     String region
 
     Map<PropertyKey, PropertyValue> props = [:]
@@ -23,7 +23,12 @@ class Stack {
     }
 
     def tags(Map<String, String> tags) {
-        this.tags = tags
+        tags.each { k, v -> this.tags.put(new PropertyKey(currentEnvironment, k), v) }
+    }
+
+    def setTags(Map<String, String> tags) {
+        this.tags.clear()
+        this.tags(tags)
     }
 
     def region(String region) {
@@ -31,16 +36,11 @@ class Stack {
     }
 
     Map<PropertyKey, PropertyValue> props(String environment) {
-        props.findAll { k, _ ->
-            if (environment == '') {
-                return k.environment == ''
-            } else {
-                if (k.environment == '') {
-                    return props.find { kk, __ -> kk.name == k.name && kk.environment == environment } == null
-                }
-                return k.environment == environment
-            }
-        }
+        byEnvironment(environment, props)
+    }
+
+    Map<PropertyKey, String> tags(String environment) {
+        byEnvironment(environment, tags)
     }
 
     def methodMissing(String m, args) {
@@ -62,6 +62,19 @@ class Stack {
         def pk = new PropertyKey(currentEnvironment, p)
         def pv = v instanceof PropertyValue ? v : new SimplePropertyValue(v)
         props.put(pk, pv)
+    }
+
+    private <A> Map<PropertyKey, A> byEnvironment(String environment, Map<PropertyKey, A> m) {
+        m.findAll { k, _ ->
+            if (environment == '') {
+                return k.environment == ''
+            } else {
+                if (k.environment == '') {
+                    return props.find { kk, __ -> kk.name == k.name && kk.environment == environment } == null
+                }
+                return k.environment == environment
+            }
+        }
     }
 }
 

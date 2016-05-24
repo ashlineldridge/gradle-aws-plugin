@@ -10,6 +10,7 @@ import com.amazonaws.services.cloudformation.model.Capability
 import com.amazonaws.services.cloudformation.model.CreateStackRequest
 import com.amazonaws.services.cloudformation.model.DescribeStacksRequest
 import com.amazonaws.services.cloudformation.model.Parameter
+import com.amazonaws.services.cloudformation.model.Tag
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.TaskAction
@@ -53,6 +54,14 @@ abstract class AbstractStackTask extends DefaultTask {
             params.add(new Parameter().withParameterKey(k.name.capitalize()).withParameterValue(v.resolve(project)))
         }
         params
+    }
+
+    def Collection<Tag> stackTags() {
+        def tags = []
+        stack().tags(environment()).each { k, v ->
+            tags.add(new Tag().withKey(k.name.capitalize()).withValue(v))
+        }
+        tags
     }
 
     def userDataError(String msg = null) {

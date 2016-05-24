@@ -15,6 +15,7 @@ class CreateOrUpdateStackTask extends CreateStackTask {
                     .withTemplateBody(s.template.text)
                     .withCapabilities(Capability.CAPABILITY_IAM)
                     .withParameters(stackParameters())
+                    .withTags(stackTags())
             try {
                 def res = client.updateStack(req)
                 logger.lifecycle("Updated CloudFormation stack '${s.cloudFormationName}' with ID '${res.stackId}'")

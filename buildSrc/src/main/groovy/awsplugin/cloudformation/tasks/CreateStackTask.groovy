@@ -13,6 +13,7 @@ class CreateStackTask extends AbstractStackTask {
                         .withTemplateBody(s.template.text)
                         .withCapabilities(Capability.CAPABILITY_IAM)
                         .withParameters(stackParameters())
+                        .withTags(stackTags())
         def res = client.createStack(req)
         logger.lifecycle("Created CloudFormation stack '${s.cloudFormationName}' with ID '${res.stackId}'")
     }
