@@ -5,6 +5,7 @@ class Stack {
     String cloudFormationName
     File template
     Map<String, String> tags = [:]
+    String region
 
     Map<PropertyKey, PropertyValue> props = [:]
     String currentEnvironment = ''
@@ -23,6 +24,10 @@ class Stack {
 
     def tags(Map<String, String> tags) {
         this.tags = tags
+    }
+
+    def region(String region) {
+        this.region = region
     }
 
     Map<PropertyKey, PropertyValue> props(String environment) {

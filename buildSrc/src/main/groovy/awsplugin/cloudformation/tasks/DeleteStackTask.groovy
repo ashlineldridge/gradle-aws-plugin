@@ -1,7 +1,5 @@
 package awsplugin.cloudformation.tasks
 
-import com.amazonaws.services.cloudformation.model.Capability
-import com.amazonaws.services.cloudformation.model.CreateStackRequest
 import com.amazonaws.services.cloudformation.model.DeleteStackRequest
 
 class DeleteStackTask extends AbstractStackTask {
@@ -9,9 +7,13 @@ class DeleteStackTask extends AbstractStackTask {
     @Override
     def run() {
         def s = stack()
-        def req = new DeleteStackRequest().withStackName(s.cloudFormationName)
-        client.deleteStack(req)
-        logger.lifecycle("Deleted CloudFormation stack '${s.cloudFormationName}'")
+        if (exists()) {
+            def req = new DeleteStackRequest().withStackName(s.cloudFormationName)
+            client.deleteStack(req)
+            logger.lifecycle("Deleted CloudFormation stack '${s.cloudFormationName}'")
+        } else {
+            logger.lifecycle("CloudFormation stack '${s.cloudFormationName}' does not exist")
+        }
     }
 
     @Override
