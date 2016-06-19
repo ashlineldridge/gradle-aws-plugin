@@ -1,0 +1,15 @@
+apply plugin: 'scala'
+apply plugin: 'maven'
+
+group = 'com.github.ashlineldridge'
+version = '0.2-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+	compile 'org.scala-lang:scala-library:2.11.8'
+    compile 'com.amazonaws:aws-java-sdk-cloudformation:1.11.0'
+}

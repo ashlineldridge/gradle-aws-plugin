@@ -23,3 +23,7 @@ Gradle AWS Plugin
 
  Make as little depend on CloudFormation as possible so teams could use some of the functionality even if not using CFN
  E.g. Could obtain ASG names from CFN output ('stack.scaffolding('output1')') or by specifying directly
+
+
+Links:
+https://github.com/pvorb/scala-gradle-plugins/blob/master/build.gradle

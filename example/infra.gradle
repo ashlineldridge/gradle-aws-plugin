@@ -1,0 +1,23 @@
+stacks {
+    scaffolding {
+        name = 'foobar-scaffolding'
+        template = file('template.json')
+        tags = [k1: 'v1', k2: 'v2']
+        sandbox {
+        }
+    }
+    application {
+//        production {
+//        }
+    }
+}
+
+//waitUntilStackCreated {
+//options.pollIntervalSeconds = 3
+//options.maxWaitTimeSeconds = 60
+//}
+
+//waitUntilSQSQueueEmpty {
+//options.pollIntervalSeconds = 3
+//options.maxWaitTimeSeconds = 60
+//}

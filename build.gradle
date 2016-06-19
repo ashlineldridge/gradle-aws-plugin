@@ -1,33 +1,10 @@
-import awsplugin.AWSPlugin
-
-apply plugin: AWSPlugin
-apply plugin: 'groovy'
-
-def buildNumber() {
-    return properties.get('buildNumber')
+configurations {
+	runtime {
+		visible = false
+	}
 }
 
-stacks {
-    scaffolding {
-        name     "foobarbaz-scaffolding"
-        template file('template.json')
-        tags     (key: "v1", key2: "v2")
-
-        bucketName = 'ashlineldridge-foobarbaz'
-        owner = 'me'
-        sandbox {
-            bucketName = 'ashlineldridge-foobarbaz-sandbox'
-        }
-    }
-    application {
-        name "foobarbaz-application-${buildNumber()}"
-        template file('template.json')
-
-        bucketName = scaffolding.output.buildBucketName
-        owner = 'me'
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+dependencies {
+	runtime project(':plugin')
+	runtime project(':example')
 }
