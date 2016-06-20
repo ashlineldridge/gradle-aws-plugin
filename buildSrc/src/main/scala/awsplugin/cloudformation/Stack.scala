@@ -27,7 +27,7 @@ class Stack(name: String) {
 
   def methodMissing(m: String, arg: Object): Object = {
     println(s"You called methodMissing with ${m} and ${arg.getClass.getName}")
-    m
+    this
   }
 
   def propertyMissing(p: String): Object = {

@@ -1,9 +1,6 @@
 apply plugin: 'scala'
 apply plugin: 'maven'
 
-group = 'com.github.ashlineldridge'
-version = '0.2-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }

@@ -1,10 +1,23 @@
-configurations {
-	runtime {
-		visible = false
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.github.ashlineldridge:awsplugin:0.2-SNAPSHOT'
 	}
 }
 
-dependencies {
-	runtime project(':plugin')
-	runtime project(':example')
+import awsplugin.AWSPlugin
+
+apply plugin: AWSPlugin
+
+def buildNumber() {
+    return properties.get('buildNumber')
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
+
+apply from: 'infra.gradle'
