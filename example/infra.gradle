@@ -3,13 +3,15 @@ stacks {
         name = 'foobar-scaffolding'
         template = file('template.json')
         tags = [k1: 'v1', k2: 'v2']
-        sandbox {
-        }
+		foobar = "ashlin"
+		foobaz "AshlinEldridge"
+        //sandbox {
+        //}
     }
-    application {
+//    application {
 //        production {
 //        }
-    }
+//    }
 }
 
 //waitUntilStackCreated {
