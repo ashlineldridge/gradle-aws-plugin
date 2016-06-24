@@ -27,6 +27,7 @@ class AWSPlugin extends Plugin[Project] {
 }
 
 class AWSPluginOptions {
-  //String region = "ap-southeast-2"
+  private[awsplugin] var region: Option[String] = None
+  def setRegion(r: String) = region = Some(r)
 }
 

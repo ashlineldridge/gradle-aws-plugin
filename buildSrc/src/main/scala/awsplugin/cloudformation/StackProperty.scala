@@ -1,6 +1,8 @@
 package awsplugin.cloudformation
 
-case class PropertyKey(property: String, environment: Option[String] = None)
+import awsplugin.cloudformation.Stack.Environment
+
+case class PropertyKey(property: String, environment: Option[Environment] = None)
 
 trait PropertyValue {
   def value: String

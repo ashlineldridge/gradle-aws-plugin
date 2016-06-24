@@ -8,12 +8,16 @@ stacks {
             foobar = "ashlin-sandbox"
         }
     }
-//    application {
-//        production {
-//        }
-//    }
+    application {
+        template = file('template.json')
+        region = "ap-southeast-2"
+        bucketName = scaffolding.output.buildBucketName
+    }
 }
 
+aws {
+    region = "us-west-1"
+}
 //waitUntilStackCreated {
 //options.pollIntervalSeconds = 3
 //options.maxWaitTimeSeconds = 60
