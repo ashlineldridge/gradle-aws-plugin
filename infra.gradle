@@ -4,9 +4,9 @@ stacks {
         template = file('template.json')
         tags = [k1: 'v1', k2: 'v2']
 		foobar = "ashlin"
-		foobaz "AshlinEldridge"
-        //sandbox {
-        //}
+        sandbox {
+            foobar = "ashlin-sandbox"
+        }
     }
 //    application {
 //        production {
@@ -22,4 +22,4 @@ stacks {
 //waitUntilSQSQueueEmpty {
 //options.pollIntervalSeconds = 3
 //options.maxWaitTimeSeconds = 60
-//}
+//

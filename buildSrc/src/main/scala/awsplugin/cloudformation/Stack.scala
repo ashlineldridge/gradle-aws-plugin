@@ -3,10 +3,12 @@ package awsplugin.cloudformation
 import java.io.File
 import java.util.{Map => JMap}
 
+import groovy.lang.{Closure, GroovyObjectSupport, MissingMethodException}
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable.{Map => MMap}
 
-class Stack(name: String) {
+class Stack(name: String) extends GroovyObjectSupport {
 
   var template: File = null
 
@@ -25,17 +27,22 @@ class Stack(name: String) {
   def addTags(tags: JMap[String, String]) =
     tags.asScala.foreach(x => this.tags.put(PropertyKey(x._1, currentEnvironment), x._2))
 
-  def methodMissing(m: String, arg: Object): Object = {
+  def methodMissing(m: String, arg: Any): Any = {
     println(s"You called methodMissing with ${m} and ${arg.getClass.getName}")
-    this
+    val args = arg.asInstanceOf[Array[Object]]
+    if (args.length > 0 && args(0).isInstanceOf[Closure[_]]) {
+      null
+    } else {
+      throw new MissingMethodException(m, getClass(), args)
+    }
   }
 
-  def propertyMissing(p: String): Object = {
+  def propertyMissing(p: String): Any = {
     println(s"You called propertyMissing with ${p}")
     p
   }
 
-  def propertyMissing(p: String, v: Object): Object = {
+  def propertyMissing(p: String, v: Any): Any = {
     println(s"You called propertyMissing with ${p} and ${v}")
     v
   }
