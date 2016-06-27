@@ -38,7 +38,7 @@ class ResolveStackPropertiesTask extends StackTask {
     if (v.refs.length != 3 || v.refs(1) != "output") raiseBuildScriptError(s"Property '${v}' is not a valid stack output reference")
     val stack = findStack(v.refs(0))
     val stackName = stack.map(_.qualifiedName).getOrElse(v.refs(0))
-    val region = stack.map(_.region).getOrElse(targetStack.region)
+    val region = stack.map(regionFor(_)).getOrElse(targetStack.region)
     val outputKey = v.refs(2).capitalize
     (stackName, outputKey, region)
   }

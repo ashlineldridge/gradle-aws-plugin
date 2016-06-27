@@ -9,7 +9,7 @@ trait AWSTask extends DefaultTask {
   def usage: String
 
   def projectProperties: Map[String, String] =
-    getProject.getProperties.asScala.toMap.mapValues(_.toString)
+    getProject.getProperties.asScala.toMap.mapValues(v => if (v != null) v.toString else null)
 
   def raiseBuildScriptError(message: String) =
     throw new InvalidUserCodeException(s"Error: $message")
