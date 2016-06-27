@@ -2,6 +2,7 @@ package awsplugin
 
 import awsplugin.cloudformation.Stack
 import awsplugin.cloudformation.tasks.ResolveStackPropertiesTask
+import com.amazonaws.regions.{Region, Regions}
 import org.gradle.api.{Plugin, Project}
 
 import scala.collection.JavaConverters._
@@ -27,7 +28,7 @@ class AWSPlugin extends Plugin[Project] {
 }
 
 class AWSPluginOptions {
-  private[awsplugin] var region: Option[String] = None
-  def setRegion(r: String) = region = Some(r)
+  private[awsplugin] var region: Option[Region] = None
+  def setRegion(r: String) = region = Some(Region.getRegion(Regions.fromName(r)))
 }
 

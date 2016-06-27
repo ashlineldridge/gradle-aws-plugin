@@ -7,19 +7,19 @@ import groovy.lang.{Closure, GroovyObjectSupport, MissingMethodException}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.{Map => MMap}
-
 import Stack._
+import com.amazonaws.regions.{Region, Regions}
 
 object Stack {
   type Environment = String
 }
 
-class Stack(name: String) extends GroovyObjectSupport {
+case class Stack(name: String) extends GroovyObjectSupport {
 
   var template: File = null
 
   private[cloudformation] var qualifiedName: String = name
-  private[cloudformation] var region: Option[String] = None
+  private[cloudformation] var region: Region = null
   private[cloudformation] val tags: MMap[PropertyKey, String] = MMap()
   private[cloudformation] val props: MMap[PropertyKey, PropertyValue] = MMap()
   private[cloudformation] def templateOption = Option(template)
@@ -28,7 +28,7 @@ class Stack(name: String) extends GroovyObjectSupport {
 
   def setName(name: String) = qualifiedName = name
   def getName() = name
-  def setRegion(r: String) = region = Some(r)
+  def setRegion(r: String) = region = Region.getRegion(Regions.fromName(r))
   def setTags(tags: JMap[String, String]) = {
     this.tags.clear()
     addTags(tags)
