@@ -27,3 +27,11 @@ Gradle AWS Plugin
 
 Links:
 https://github.com/pvorb/scala-gradle-plugins/blob/master/build.gradle
+
+TODO:
+  - Create a colour logger where the colour is determined by a set of informational types
+  - E.g. logger.lifecycle(title("Property name:"), body("Property value")) surely this can be improved on
+  - http://stackoverflow.com/questions/14516693/gradle-color-output
+  -
+  - Split Stack domain object from the GroovyObjectSupport object needed for the DSL
+

@@ -36,8 +36,11 @@ case class Stack(name: String) extends GroovyObjectSupport {
   def addTags(tags: JMap[String, String]) =
     tags.asScala.foreach(x => this.tags.put(PropertyKey(x._1, currentEnvironment), x._2))
 
+  def props(env: Option[Environment]): Map[String, String] = byEnvironment(props.toMap, env)
+
+  def tags(env: Option[Environment]): Map[String, String] = byEnvironment(tags.toMap, env)
+
   def methodMissing(m: String, arg: Any): Any = {
-    println(s"You called methodMissing with ${m} and ${arg.getClass.getName}")
     val args = arg.asInstanceOf[Array[Object]]
     if (args.length > 0 && args(0).isInstanceOf[Closure[_]]) {
       currentEnvironment = Some(m)
@@ -50,18 +53,21 @@ case class Stack(name: String) extends GroovyObjectSupport {
   }
 
   def propertyMissing(p: String): Any = {
-    println(s"You called propertyMissing with ${p}")
     ReferencePropertyValue(List(p))
   }
 
   def propertyMissing(p: String, v: Any): Any = {
-    println(s"You called propertyMissing with ${p} and ${v}")
     val pk = PropertyKey(p, currentEnvironment)
     val pv = v match {
       case x: PropertyValue => x
       case y: String => SimplePropertyValue(y)
     }
     props.put(pk, pv)
+  }
+
+  private def byEnvironment[V](m: Map[PropertyKey, V], env: Option[Environment]): Map[String, String] = {
+    def convert(m: Map[PropertyKey, V]) = m map { case (k, v) => (k.property, v.toString) }
+    convert(m filterKeys { k => k.environment.isEmpty }) ++ convert(m filterKeys { k => k.environment == env })
   }
 }
 

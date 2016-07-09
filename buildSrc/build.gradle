@@ -9,4 +9,5 @@ dependencies {
     compile gradleApi()
 	compile 'org.scala-lang:scala-library:2.11.8'
     compile 'com.amazonaws:aws-java-sdk-cloudformation:1.11.0'
+    compile 'com.typesafe.scala-logging:scala-logging_2.11:3.4.0'
 }

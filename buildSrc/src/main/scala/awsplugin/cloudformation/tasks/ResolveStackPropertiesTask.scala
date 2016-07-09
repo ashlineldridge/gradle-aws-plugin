@@ -21,6 +21,7 @@ class ResolveStackPropertiesTask extends StackTask {
     applyRegion(targetStack)
     applyPropertyOverrides(targetStack)
     targetStack.props.transform((k, v) => resolve(v))
+    log(targetStack)
   }
 
   private def resolve(v: PropertyValue): SimplePropertyValue = v match {
@@ -65,5 +66,15 @@ class ResolveStackPropertiesTask extends StackTask {
       case _       => raiseBuildScriptError(s"No region could be found for stack '${stack.name}'")
     }
     case r => r
+  }
+
+  private def log(stack: Stack) = {
+    def printMap(m: Map[String, String]) = m.foldLeft("") { (z, a) => s"${z}\n    ${a._1}: ${a._2}" }
+    logger.lifecycle(
+    s"""Resolved properties for stack '${stack.name}':
+       |  Qualified name: ${stack.qualifiedName}
+       |  Region: ${stack.region}
+       |  Tags: ${printMap(stack.tags(targetEnvironment))}
+       |  Properties: ${printMap(stack.props(targetEnvironment))}""".stripMargin)
   }
 }

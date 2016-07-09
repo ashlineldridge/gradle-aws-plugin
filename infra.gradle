@@ -7,6 +7,9 @@ stacks {
         sandbox {
             foobar = "ashlin-sandbox"
         }
+        production {
+            hello = "ashlin-production"
+        }
     }
     application {
         template = file('template.json')

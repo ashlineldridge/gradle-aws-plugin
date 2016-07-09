@@ -19,4 +19,6 @@ trait AWSTask extends DefaultTask {
 
   def pluginOptions: AWSPluginOptions =
     getProject.getExtensions.getByType(classOf[AWSPluginOptions])
+
+  protected val logger = getLogger
 }
