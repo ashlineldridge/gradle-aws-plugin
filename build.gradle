@@ -1,7 +1,6 @@
 import awsplugin.AWSPlugin
 
 apply plugin: AWSPlugin
-apply plugin: 'groovy'
 
 def buildNumber() {
     return properties.get('buildNumber')
@@ -13,8 +12,7 @@ stacks {
         template file('template.json')
         tags     (key: "v1", key2: "v2")
 
-        bucketName = 'ashlineldridge-foobarbaz'
-        owner = 'me'
+//        bucketName = 'ashlineldridge-foobarbaz'
         sandbox {
             bucketName = 'ashlineldridge-foobarbaz-sandbox'
         }
@@ -27,6 +25,16 @@ stacks {
         owner = 'me'
     }
 }
+//
+//waitUntilStackCreated {
+//    options.pollIntervalSeconds = 3
+//    options.maxWaitTimeSeconds = 60
+//}
+//
+//waitUntilSQSQueueEmpty {
+//    options.pollIntervalSeconds = 3
+//    options.maxWaitTimeSeconds = 60
+//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'

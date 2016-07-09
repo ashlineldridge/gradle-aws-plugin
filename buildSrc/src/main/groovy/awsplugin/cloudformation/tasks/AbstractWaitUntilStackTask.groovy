@@ -10,6 +10,7 @@ abstract class AbstractWaitUntilStackTask extends AbstractStackTask {
         long maxWaitTimeSeconds = 600
     }
 
+    Options options = new Options()
     private Collection<StackStatus> desiredStates
     private Collection<StackStatus> undesiredStates
 
@@ -21,7 +22,7 @@ abstract class AbstractWaitUntilStackTask extends AbstractStackTask {
     @Override
     def run() {
         def start = System.currentTimeSeconds()
-        while (System.currentTimeSeconds() - start < options().maxWaitTimeSeconds) {
+        while (System.currentTimeSeconds() - start < options.maxWaitTimeSeconds) {
             def status = stackStatus()
             if (undesiredStates.contains(status))
                 throw new GradleException("Operation on CloudFormation stack '${stack().cloudFormationName}' failed: ${status}")
@@ -29,12 +30,8 @@ abstract class AbstractWaitUntilStackTask extends AbstractStackTask {
                 logger.lifecycle("Operation on CloudFormation stack '${stack().cloudFormationName}' complete: ${status}")
                 return
             }
-            sleep(options().pollIntervalSeconds * 1000)
+            sleep(options.pollIntervalSeconds * 1000)
         }
         throw new GradleException("Operation on CloudFormation stack '${stack().cloudFormationName}' timed out")
-    }
-
-    private Options options() {
-        project[getName()]
     }
 }

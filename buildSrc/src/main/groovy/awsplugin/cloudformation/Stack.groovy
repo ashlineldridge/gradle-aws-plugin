@@ -43,26 +43,26 @@ class Stack {
         byEnvironment(environment, tags)
     }
 
-    def methodMissing(String m, args) {
-        if (args.length > 0 && args[0] instanceof Closure) {
-            currentEnvironment = m
-            Closure c = args[0]
-            c()
-            currentEnvironment = ''
-        } else {
-            throw new MissingMethodException(m, getClass(), (Object[]) args)
-        }
-    }
+	def methodMissing(String m, args) {
+		if (args.length > 0 && args[0] instanceof Closure) {
+			currentEnvironment = m
+			Closure c = args[0]
+			c()
+			currentEnvironment = ''
+		} else {
+			throw new MissingMethodException(m, getClass(), (Object[]) args)
+		}
+	}
 
-    def propertyMissing(String p) {
-        new ReferencePropertyValue(currentEnvironment, p)
-    }
+	def propertyMissing(String p) {
+		new ReferencePropertyValue(currentEnvironment, p)
+	}
 
-    def propertyMissing(String p, v) {
-        def pk = new PropertyKey(currentEnvironment, p)
-        def pv = v instanceof PropertyValue ? v : new SimplePropertyValue(v)
-        props.put(pk, pv)
-    }
+	def propertyMissing(String p, v) {
+		def pk = new PropertyKey(currentEnvironment, p)
+		def pv = v instanceof PropertyValue ? v : new SimplePropertyValue(v)
+		props.put(pk, pv)
+	}
 
     private <A> Map<PropertyKey, A> byEnvironment(String environment, Map<PropertyKey, A> m) {
         m.findAll { k, _ ->

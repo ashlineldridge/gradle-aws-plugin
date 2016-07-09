@@ -17,9 +17,6 @@ class AWSPlugin implements Plugin<Project> {
     void apply(Project project) {
         def stacks = project.container(Stack)
         project.extensions.create('aws', AWSPluginOptions)
-        project.extensions.create('waitUntilStackCreated', AbstractWaitUntilStackTask.Options)
-        project.extensions.create('waitUntilStackCreatedOrUpdated', AbstractWaitUntilStackTask.Options)
-        project.extensions.create('waitUntilStackDeleted', AbstractWaitUntilStackTask.Options)
         project.extensions.add('stacks', stacks)
         project.task('createStack', type: CreateStackTask, dependsOn: 'resolveStackProperties')
         project.task('createOrUpdateStack', type: CreateOrUpdateStackTask, dependsOn: 'resolveStackProperties')

@@ -16,6 +16,7 @@ class ResolveStackPropertiesTask extends AbstractStackTask {
 
     @Override
     def run() {
+        println("ResolveStackPropertiesTask yeah!")
         def s = stack()
         applyPropertyOverrides(s)
         def unresolved = s.props
