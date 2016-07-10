@@ -34,4 +34,8 @@ TODO:
   - http://stackoverflow.com/questions/14516693/gradle-color-output
   -
   - Split Stack domain object from the GroovyObjectSupport object needed for the DSL
+  -
+  - Include support for multi-account stack support
+  - Include support for IAM STS AssumeRole deployment user
+  - Include support for uploading CloudFormation templates to S3 before execution of tasks like CreateStack, etc
 

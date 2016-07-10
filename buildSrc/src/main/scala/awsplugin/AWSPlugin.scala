@@ -1,7 +1,7 @@
 package awsplugin
 
-import awsplugin.cloudformation.Stack
-import awsplugin.cloudformation.tasks.ResolveStackPropertiesTask
+import awsplugin.cloudformation.dsl.GradleStack
+import awsplugin.cloudformation.tasks.ResolveStackParametersTask
 import com.amazonaws.regions.{Region, Regions}
 import org.gradle.api.{Plugin, Project}
 
@@ -10,9 +10,9 @@ import scala.collection.JavaConverters._
 class AWSPlugin extends Plugin[Project] {
 
   override def apply(project: Project): Unit = {
-    val stacks = project.container(classOf[Stack])
+    val stacks = project.container(classOf[GradleStack])
     project.getExtensions.add("stacks", stacks)
-    project.task(Map("type" -> classOf[ResolveStackPropertiesTask]).asJava, "resolveStackProperties")
+    project.task(Map("type" -> classOf[ResolveStackParametersTask]).asJava, "resolveStackParameters")
 
     project.getExtensions.create("aws", classOf[AWSPluginOptions])
 
